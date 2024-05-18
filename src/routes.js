@@ -1,9 +1,8 @@
-import {Router} from 'express';
+import { Router } from 'express';
+import UserContoller from './app/controllrs/UserController'
 
 const routes = new Router()
 
-routes.get('/', (req, res) => {
-    return res.send('hello, world!');
-});
+routes.post('/users', UserContoller.store);
 
 export default routes
