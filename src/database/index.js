@@ -1,4 +1,4 @@
-import  Sequelize  from "sequelize";
+import Sequelize from "sequelize";
 
 import configDatabase from '../config/database'
 
@@ -13,9 +13,13 @@ class Database {
         this.init();
     }
 
+    //Aqui nos inicia as conexões do banco com o back 
     init() {
         this.connection = new Sequelize(configDatabase);
-        models.map((models) => models.init(this.connection));
+        models
+        .map((models) => models.init(this.connection))
+        .map(
+        (model) => model.associate && model.associate(this.connection.models))// vamos avisar que existem os relacionamentos;
     }
 }
 
