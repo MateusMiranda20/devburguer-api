@@ -2,6 +2,7 @@ import * as Yup from 'yup'
 import Order from '../schemas/Order'
 import Products from '../models/Products';
 import Category from '../models/Category';
+import User from '../models/User';
 
 class OrderController {
     async store(request, response) {
@@ -32,14 +33,14 @@ class OrderController {
                 {
                     model: Category,
                     as: 'category',
-                    attributes:['name']
-                }
-             ]
-        })
+                    attributes:['name'],
+                },
+             ],
+        });
 
-        const formattedProducts = findProducts.map(product => { 
+        const formattedProducts = findProducts.map((product) => { 
 
-            const productIndex = products.findIndex(item => item.id ===product.id);
+            const productIndex = products.findIndex((item) => item.id === product.id);
 
             const newProducts = {
                 id: product.id,
@@ -47,7 +48,7 @@ class OrderController {
                 category: product.category.name,
                 price: product.price,
                 url: product.url,
-                quantity: product[productIndex].quantity
+                quantity: products[productIndex].quantity
             }
 
             return newProducts
@@ -58,12 +59,50 @@ class OrderController {
                 id: request.userId,
                 name: request.userName,
             },
-            products: formattedProducts
+            products: formattedProducts,
+            status: '',
         }
 
-        return response.status(201).json(order)
+        const createdOrder = await Order.create(order)
+
+        return response.status(201).json(createdOrder)
     }
 
+    async index(request, response){
+        const orders = await Order.find();
+
+        return response.json(orders)
+    }
+
+    async update( request, response) {
+        const schema = Yup.object({
+            status: Yup.string().required(),
+        })
+        
+        try {
+            schema.validateSync(request.body, { abortEarly: false })
+        } catch (err) {
+            return response.status(400).json({ error: err.errors })
+        }
+
+        const { id } = request.params;
+        const { status } = request.body;
+
+        const { admin: isAdmin} =  await User.findByPk(request.UserId)
+
+        if(!isAdmin){
+            return response.status(401).json()
+        }
+
+        try {
+            await Order.updateOne({ _id: id}, {status});
+        } catch (err) {
+            return response.status(400).json({ error: err.message })
+        }
+
+        return response.json({message: "Status update with succes"})
+
+    }
 }
 
 export default new OrderController();
