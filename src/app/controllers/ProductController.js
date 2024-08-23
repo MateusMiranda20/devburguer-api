@@ -8,7 +8,8 @@ class ProductController {
         const schema = Yup.object({
             name: Yup.string().required(),
             price: Yup.number().required(),
-            category_id: Yup.number().required()
+            category_id: Yup.number().required(),
+            offer:Yup.boolean()
         });
 
         try {
@@ -24,13 +25,14 @@ class ProductController {
         }
 
         const { filename: path } = request.file;
-        const { name, price, category_id } = request.body
+        const { name, price, category_id, offer } = request.body
 
         const product = await Product.create({
             name,
             price,
             category_id,
-            path
+            path,
+            offer
         })
 
         return response.status(201).json( product)
@@ -49,6 +51,57 @@ class ProductController {
 
         return response.json(products)
     }
+
+    async update(request, response){
+        const schema = Yup.object({
+            name: Yup.string(),
+            price: Yup.number(),
+            category_id: Yup.number(),
+            offer:Yup.boolean()
+        });
+
+        try {
+            schema.validateSync(request.body, { abortEarly: false })
+        } catch (err) {
+            return response.status(400).json({ error: err.errors })
+        }
+
+        const { admin: isAdmin} =  await User.findByPk(request.UserId)
+
+        if(!isAdmin){
+            return response.status(401).json()
+        }
+
+        const { id } = request.params;
+
+        const findProduct = await Product.findByPk(id);
+
+        if(!findProduct){
+            return response.status(400).json({error:"Make sure your ID is Correct"})
+        }
+
+        let path;
+        if(request.file){
+            path = request.file.filename
+        }
+
+        const { name, price, category_id, offer } = request.body
+
+        const product = await Product.update({
+            name,
+            price,
+            category_id,
+            path,
+            offer
+        }, {
+            where:{
+                id,
+            }
+        })
+
+        return response.status(201).json( product)
+    }   
+    
 }
 
 export default new ProductController();
