@@ -38,6 +38,7 @@ class UserContoller {
 
         const user = await User.create({
             id: v4(),
+            name,
             email,
             password,
             admin,
