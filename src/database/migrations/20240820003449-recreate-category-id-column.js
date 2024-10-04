@@ -1,25 +1,17 @@
-
-'use strict';
-
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
-    await queryInterface.removeColumn('products', 'category_id');
+  up: async (queryInterface, Sequelize) => {
     await queryInterface.addColumn('products', 'category_id', {
       type: Sequelize.INTEGER,
-      allowNull: false,
       references: {
-        model: 'categories',
-        key: 'id'
-      }, 
-        onUpdate: 'CASCADE',
-        onDelete: 'SET NULL',
-        // eslint-disable-next-line no-dupe-keys
-        allowNull: true,
+        model: 'categories', // Nome da tabela relacionada
+        key: 'id',
+      },
+      onUpdate: 'CASCADE',
+      onDelete: 'SET NULL',
     });
   },
 
-  async down (queryInterface) {
+  down: async (queryInterface) => {
     await queryInterface.removeColumn('products', 'category_id');
-  }
+  },
 };
