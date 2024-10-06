@@ -2,6 +2,7 @@ import * as Yup from 'yup'
 import Category from '../models/Category';
 import User from '../models/User';
 
+
 class CategoryController {
     async store(request, response) {
         const schema = Yup.object({
@@ -14,20 +15,15 @@ class CategoryController {
             return response.status(400).json({ error: err.errors })
         }
 
-        const { name } = request.body
-
-        const user = await User.findByPk(request.UserId);
-
-        if (!user) {
-            return response.status(404).json({ error: 'User not found' });
-        }
-
-        const { admin: isAdmin } = user;
+        const { admin: isAdmin } = await User.findByPk(request.userId)
+        console.log(request.User)
 
         if (!isAdmin) {
             return response.status(401).json({ error: 'Unauthorized' });
         }
 
+        const { filename: path } = request.file
+        const { name } = request.body
 
         const categoryExists = await Category.findOne({
             where: {
@@ -35,16 +31,16 @@ class CategoryController {
             },
         });
 
+        
         if (categoryExists) {
             return response.status(400).json({ error: 'Category already exists.' })
         }
-
-        const { filename: path } = request.file
 
         const { id } = await Category.create({
             name,
             path
         })
+
 
         return response.status(201).json({ id, name })
     }
@@ -100,11 +96,11 @@ class CategoryController {
     
         await Category.update({
             name,
-            path,
+            path
         }, {
             where: {
                 id,
-            },
+            }
         });
     
         return response.status(200).json();
@@ -113,3 +109,4 @@ class CategoryController {
 }
 
 export default new CategoryController();
+

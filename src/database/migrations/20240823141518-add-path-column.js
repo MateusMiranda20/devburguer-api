@@ -13,7 +13,7 @@ module.exports = {
 
   async down(queryInterface) {
 
-    await queryInterface.removeColumn('categories', 'path');
+    await queryInterface.dropTable('categories', 'path');
 
   }
 };
