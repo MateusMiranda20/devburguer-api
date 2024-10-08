@@ -23,26 +23,28 @@ class CategoryController {
         }
 
         const { filename: path } = request.file
-        const { name } = request.body
+        let { name } = request.body
+
+        name = name.trim().toLowerCase();
 
         const categoryExists = await Category.findOne({
             where: {
                 name,
             },
         });
-
         
         if (categoryExists) {
             return response.status(400).json({ error: 'Category already exists.' })
         }
 
-        const { id } = await Category.create({
+        // Criar a nova categoria, já que ela não existe
+        const category = await Category.create({
             name,
-            path
-        })
+            path,
+        });
 
-
-        return response.status(201).json({ id, name })
+        // Retornar a nova categoria criada
+        return response.status(201).json({ id: category.id, name: category.name });
     }
 
     async index(request, response) {

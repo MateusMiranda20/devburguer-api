@@ -1,32 +1,39 @@
-import Sequelize, { Model } from 'sequelize'
+import Sequelize, { Model } from 'sequelize';
 
 class Product extends Model {
     static init(sequelize) {
         super.init(
             {
                 name: Sequelize.STRING,
-                price: Sequelize.INTEGER,
-                path: Sequelize.STRING,
+                price: Sequelize.DECIMAL(10, 2), // Alterado para DECIMAL
+                path: {
+                    type: Sequelize.STRING,
+                    allowNull: false, // Garante que o path não seja nulo
+                    validate: {
+                        notEmpty: true, // Valida que o campo não esteja vazio
+                    },
+                },
                 url: {
                     type: Sequelize.VIRTUAL,
                     get() {
-                        return `http://localhost:3001/product-file/${this.path}`;
+                        const baseUrl = process.env.APP_URL || 'http://localhost:3001';
+                        return `${baseUrl}/product-file/${this.path}`;
                     },
                 },
-            }, {
-            sequelize,
-        },
+            },
+            {
+                sequelize,
+            }
         );
         return this;
     }
 
-    static associate(models){
+    static associate(models) {
         this.belongsTo(models.Category, {
             foreignKey: 'category_id',
-            as: 'category'
-        })
+            as: 'category',
+        });
     }
 }
 
-
-export default Product
+export default Product;

@@ -1,4 +1,4 @@
-import * as Yup from 'yup'
+import * as Yup from 'yup';
 import Product from '../models/Products';
 import Category from '../models/Category';
 import User from '../models/User';
@@ -9,33 +9,37 @@ class ProductController {
             name: Yup.string().required(),
             price: Yup.number().required(),
             category_id: Yup.number().required(),
-            offer:Yup.boolean()
+            offer: Yup.boolean(),
         });
 
         try {
-            schema.validateSync(request.body, { abortEarly: false })
+            await schema.validate(request.body, { abortEarly: false });
         } catch (err) {
-            return response.status(400).json({ error: err.errors })
+            return response.status(400).json({ error: err.errors });
         }
 
-        const { admin: isAdmin} =  await User.findByPk(request.UserId)
+        const { admin: isAdmin } = await User.findByPk(request.userId);
 
-        if(!isAdmin){
-            return response.status(401).json()
+        if (!isAdmin) {
+            return response.status(401).json({ error: 'Unauthorized' });
+        }
+
+        if (!request.file) {
+            return response.status(400).json({ error: 'File is required' });
         }
 
         const { filename: path } = request.file;
-        const { name, price, category_id, offer } = request.body
+        const { name, price, category_id, offer } = request.body;
 
         const product = await Product.create({
             name,
             price,
             category_id,
             path,
-            offer
-        })
+            offer,
+        });
 
-        return response.status(201).json( product)
+        return response.status(201).json(product);
     }
 
     async index(request, response) {
@@ -44,64 +48,62 @@ class ProductController {
                 {
                     model: Category,
                     as: 'category',
-                    attributes: ['id', 'name']
-                }
-            ]
+                    attributes: ['id', 'name'],
+                },
+            ],
         });
 
-        return response.json(products)
+        return response.json(products);
     }
 
-    async update(request, response){
+    async update(request, response) {
         const schema = Yup.object({
             name: Yup.string(),
             price: Yup.number(),
             category_id: Yup.number(),
-            offer:Yup.boolean()
+            offer: Yup.boolean(),
         });
 
         try {
-            schema.validateSync(request.body, { abortEarly: false })
+            await schema.validate(request.body, { abortEarly: false });
         } catch (err) {
-            return response.status(400).json({ error: err.errors })
+            return response.status(400).json({ error: err.errors });
         }
 
-        const { admin: isAdmin} =  await User.findByPk(request.UserId)
+        const { admin: isAdmin } = await User.findByPk(request.userId);
 
-        if(!isAdmin){
-            return response.status(401).json()
+        if (!isAdmin) {
+            return response.status(401).json({ error: 'Unauthorized' });
         }
 
         const { id } = request.params;
-
         const findProduct = await Product.findByPk(id);
 
-        if(!findProduct){
-            return response.status(400).json({error:"Make sure your ID is Correct"})
+        if (!findProduct) {
+            return response.status(400).json({ error: 'Product not found' });
         }
 
-        let path;
-        if(request.file){
-            path = request.file.filename
-        }
+        const { name, price, category_id, offer } = request.body;
 
-        const { name, price, category_id, offer } = request.body
-
-        const product = await Product.update({
+        const updateData = {
             name,
             price,
             category_id,
-            path,
-            offer
-        }, {
-            where:{
-                id,
-            }
-        })
+            offer,
+        };
 
-        return response.status(201).json( product)
-    }   
-    
+        if (request.file) {
+            updateData.path = request.file.filename;
+        }
+
+        await Product.update(updateData, {
+            where: { id },
+        });
+
+        const updatedProduct = await Product.findByPk(id);
+
+        return response.status(200).json(updatedProduct);
+    }
 }
 
 export default new ProductController();
