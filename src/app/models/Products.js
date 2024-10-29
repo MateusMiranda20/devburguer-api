@@ -10,9 +10,10 @@ class Product extends Model {
                     type: Sequelize.STRING,
                     allowNull: false, // Garante que o path não seja nulo
                     validate: {
-                        notEmpty: true, // Valida que o campo não esteja vazio
+                    notEmpty: true, // Valida que o campo não esteja vazio
                     },
                 },
+                offer: Sequelize.BOOLEAN,
                 url: {
                     type: Sequelize.VIRTUAL,
                     get() {

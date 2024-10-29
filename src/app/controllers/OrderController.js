@@ -88,7 +88,7 @@ class OrderController {
         const { id } = request.params;
         const { status } = request.body;
 
-        const { admin: isAdmin} =  await User.findByPk(request.UserId)
+        const { admin: isAdmin} =  await User.findByPk(request.userId)
 
         if(!isAdmin){
             return response.status(401).json()

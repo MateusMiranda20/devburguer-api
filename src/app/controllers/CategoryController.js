@@ -64,7 +64,7 @@ class CategoryController {
             return response.status(400).json({ error: err.errors });
         }
     
-        const { admin: isAdmin } = await User.findByPk(request.UserId);
+        const { admin: isAdmin } = await User.findByPk(request.userId);
     
         if (!isAdmin) {
             return response.status(401).json();

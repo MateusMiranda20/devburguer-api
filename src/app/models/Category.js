@@ -13,7 +13,7 @@ class Category extends Model {
                     },
                 },
             }, {
-            sequelize,
+            sequelize,  
         },
         );
         return this;
