@@ -42,7 +42,8 @@ const OrderSchema = new mongoose.Schema({
     ],
     status: {
         type: String,
-        required: true,
+        required: false,
+        default: 'Pendente', // Define o valor padrão
     },
 },
     {
