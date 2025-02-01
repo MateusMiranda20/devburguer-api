@@ -11,16 +11,17 @@ import CreatePaymentIntentController from './app/controllers/stripe/CreatePaymen
 
 const routes = new Router()
 
-const upload = multer(multerConfig)
+const upload = multer(multerConfig);
 
 routes.post('/users', UserContoller.store);
 routes.post('/session', SessionController.store);
+
 
 routes.use(authMiddleware)
 
 routes.post('/products', upload.single('file'), ProductController.store);
 routes.get('/products', ProductController.index)
-routes.post('/products/:id', upload.single('file'), ProductController.update);
+routes.put('/products/:id', upload.single('file'), ProductController.update);
 
 routes.post('/categories', upload.single('file'), CategoryController.store);
 routes.get('/categories', CategoryController.index)

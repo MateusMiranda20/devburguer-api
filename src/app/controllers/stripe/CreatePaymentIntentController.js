@@ -1,13 +1,13 @@
 
 import * as Yup from 'yup'
-const stripe = require("stripe")('sk_test_51QUGOoH60qRGFMwHptvfHzYHVz4k2aIhMPEdBB6oMmtAE5slhEfQv8S116qLMhj8rpueFqhKYl6jqLdmlM4nmOyT009ZoVWWhA');
+const stripe = require('stripe')('sk_test_51QUGOoH60qRGFMwHptvfHzYHVz4k2aIhMPEdBB6oMmtAE5slhEfQv8S116qLMhj8rpueFqhKYl6jqLdmlM4nmOyT009ZoVWWhA');
 
 const calculateOrderAmount = (items) => {
     const total = items.reduce((acc, current) => {
         return current.price * current.quantity + acc
     }, 0)
 
-    return total * 100
+    return total
 }
 
 class CreatePaymentIntentController {
