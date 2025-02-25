@@ -1,3 +1,3 @@
 import app  from './app'
 
-app.listen(3001, () => console.log('Server is running ar port 3001 ..'))
+app.listen(4000, () => console.log('Server is running ar port 4000 ..'))
