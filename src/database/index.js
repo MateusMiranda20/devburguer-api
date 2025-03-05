@@ -16,16 +16,20 @@ class Database {
 
     //Aqui nos inicia as conexões do banco com o back 
     init() {
-        this.connection = new Sequelize(configDatabase);
+        this.connection = new Sequelize(configDatabase)
         models
-        .map((models) => models.init(this.connection))
-        .map(
-        (model) => model.associate && model.associate(this.connection.models))// vamos avisar que existem os relacionamentos;
+            .map((models) => models.init(this.connection))
+            .map(
+                (model) => model.associate && model.associate(this.connection.models))// vamos avisar que existem os relacionamentos;
     }
 
-    mongo() {
-        this.mongoConnection = mongoose.connect('mongodb://localhost:27017/devburger')
+    async mongo() {
+        this.mongoConnection = await mongoose.connect(process.env.MONGO_URI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        })
+        .then(() => console.log('🔥 MongoDB Atlas conectado com sucesso!'))
+        .catch((err) => console.error('❌ Erro ao conectar ao MongoDB:', err));
     }
 }
-
 export default new Database();

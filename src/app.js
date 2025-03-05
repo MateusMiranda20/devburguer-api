@@ -2,6 +2,8 @@ import express from 'express';
 import routes from './routes';
 import { resolve } from 'node:path'
 import cors from 'cors'
+import 'dotenv/config';
+
 
 import './database';
 class App {
