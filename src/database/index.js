@@ -21,6 +21,8 @@ class Database {
             .map((models) => models.init(this.connection))
             .map(
                 (model) => model.associate && model.associate(this.connection.models))// vamos avisar que existem os relacionamentos;
+                console.log(configDatabase);
+
     }
 
     async mongo() {
