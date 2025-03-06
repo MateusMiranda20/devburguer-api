@@ -11,3 +11,7 @@ export default {
         underscoredAll: true,
     },
 };
+
+
+// Definir a URL base do backend
+process.env.APP_URL = "https://devburguer-api.onrender.com";
