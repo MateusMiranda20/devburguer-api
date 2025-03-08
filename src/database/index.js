@@ -5,6 +5,7 @@ import configDatabase from '../config/database'
 import User from "../app/models/User"
 import Product from "../app/models/Products";
 import Category from "../app/models/Category";
+import 'dotenv/config';
 
 const models = [User, Product, Category]
 
@@ -27,8 +28,6 @@ class Database {
 
     async mongo() {
         this.mongoConnection = await mongoose.connect(process.env.MONGO_URI, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
         })
         .then(() => console.log('🔥 MongoDB Atlas conectado com sucesso!'))
         .catch((err) => console.error('❌ Erro ao conectar ao MongoDB:', err));
