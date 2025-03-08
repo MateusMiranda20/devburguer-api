@@ -1,16 +1,19 @@
-export default {
-    dialect: process.env.DB_DIALECT || "postgres", // Adicione um valor padrão para evitar erros
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
+import 'dotenv/config';
+
+module.exports = {
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    dialect: process.env.DB_DIALECT || 'postgres',
     define: {
-        timestamps: true,
-        underscored: true,
-        underscoredAll: true,
-    },
-};
+      timestamps: true,
+      underscored: true,
+      underscoredAll: true,
+    }
+}
+
 
 
 // Definir a URL base do backend
