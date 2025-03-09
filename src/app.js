@@ -11,7 +11,7 @@ class App {
     this.app = express()
     this.app.use(cors({
       origin: "https://hamburgueria-front-n5tv.vercel.app", // Substitua pela URL do frontend
-      methods: "get,post,put,delete",
+      methods: "GET,POST,PUT,DELETE",
       credentials: true, // Permite cookies e headers de autenticação
     }));
     
