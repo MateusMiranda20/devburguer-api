@@ -22,15 +22,14 @@ class Database {
             .map((models) => models.init(this.connection))
             .map(
                 (model) => model.associate && model.associate(this.connection.models))// vamos avisar que existem os relacionamentos;
-                console.log(configDatabase);
-
+        console.log(configDatabase);
     }
 
     async mongo() {
         this.mongoConnection = await mongoose.connect(process.env.MONGO_URI, {
         })
-        .then(() => console.log('🔥 MongoDB Atlas conectado com sucesso!'))
-        .catch((err) => console.error('❌ Erro ao conectar ao MongoDB:', err));
+            .then(() => console.log('🔥 MongoDB Atlas conectado com sucesso!'))
+            .catch((err) => console.error('❌ Erro ao conectar ao MongoDB:', err));
     }
 }
 export default new Database();
