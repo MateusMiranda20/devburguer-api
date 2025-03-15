@@ -5,6 +5,8 @@ import authConfig from '../../config/auth'
 function authMiddleware(request, response, next){
     const authToken = request.headers.authorization;
 
+    console.log("TOKEN RECEBIDO:", authToken)
+
     if (!authToken) {
         return response.status(401).json({error: 'Token not provided'});
     }
