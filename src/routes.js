@@ -16,6 +16,15 @@ const upload = multer(multerConfig);
 routes.post('/users', UserContoller.store);
 routes.post('/session', SessionController.store);
 
+// Adicione esta linha no seu arquivo routes.js, junto com as outras rotas
+routes.get('/test-auth', authMiddleware, (req, res) => {
+    return res.json({ 
+      success: true,
+      userId: req.userId,
+      headers: req.headers
+    });
+  });
+
 
 
 routes.post('/products', authMiddleware, upload.single('file'), ProductController.store);

@@ -28,7 +28,7 @@ function authMiddleware(request, response, next) {
 
         console.log("REQUEST USER ID DEPOIS DE ATRIBUIR:", request.userId);
 
-        return next();
+        next();
     } catch (err) {
         return response.status(401).json({ error: 'Token inválido' });
     }

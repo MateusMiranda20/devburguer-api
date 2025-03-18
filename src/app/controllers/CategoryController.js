@@ -16,7 +16,7 @@ class CategoryController {
         }
 
         const { admin: isAdmin } = await User.findByPk(request.userId)
-        console.log(request.User)
+        console.log(request.userId)
 
         if (!isAdmin) {
             return response.status(401).json({ error: 'Unauthorized' });
