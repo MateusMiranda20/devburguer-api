@@ -17,20 +17,19 @@ routes.post('/users', UserContoller.store);
 routes.post('/session', SessionController.store);
 
 
-routes.use(authMiddleware)
 
-routes.post('/products', upload.single('file'), ProductController.store);
-routes.get('/products', ProductController.index)
-routes.put('/products/:id', upload.single('file'), ProductController.update);
+routes.post('/products', authMiddleware, upload.single('file'), ProductController.store);
+routes.get('/products', authMiddleware, ProductController.index)
+routes.put('/products/:id', authMiddleware, upload.single('file'), ProductController.update);
 
-routes.post('/categories', upload.single('file'), CategoryController.store);
-routes.get('/categories', CategoryController.index)
-routes.put('/categories/:id', upload.single('file'), CategoryController.update);
+routes.post('/categories', authMiddleware, upload.single('file'), CategoryController.store);
+routes.get('/categories', authMiddleware, CategoryController.index)
+routes.put('/categories/:id', authMiddleware, upload.single('file'), CategoryController.update);
 
-routes.post('/orders', OrderController.store)
-routes.get('/orders', OrderController.index)
-routes.put('/orders/:id', OrderController.update)
+routes.post('/orders', authMiddleware, OrderController.store)
+routes.get('/orders', authMiddleware, OrderController.index)
+routes.put('/orders/:id', authMiddleware, OrderController.update)
 
-routes.post('/create-payment-intent', CreatePaymentIntentController.store)
+routes.post('/create-payment-intent', authMiddleware, CreatePaymentIntentController.store)
 
 export default routes
